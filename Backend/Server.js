@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(cors());
 app.use('/', routes );
-const port = 3000
+const port = 3002
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
