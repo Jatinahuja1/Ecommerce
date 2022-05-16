@@ -12,6 +12,7 @@ module.exports = {
    * userController.register()
    */
   register: async (req, res) => {
+    console.log(req.body)
     try {
       console.log("working2");
       let userCheck = await userModel.findOne({
@@ -32,7 +33,7 @@ module.exports = {
       if (userCheck) {
         return res.status(400).json({
           error: true,
-          message: "Username is already in use",
+          message: "username is already in use",
         });
       }
       const user = new userModel(req.body);
@@ -72,13 +73,13 @@ module.exports = {
           });
         } else {
           res.status(200).send({
-            success: true,
+            success: false,
             message: "password does not match",
           });
         }
       } else {
         res.status(200).send({
-          success: true,
+          success: false,
           message: "email does not exist",
         });
       }

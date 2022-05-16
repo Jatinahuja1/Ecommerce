@@ -8,6 +8,7 @@ import Products from "../components/Products";
 import Newsletter from "../components/Newsletter";
 
 const Home = () => {
+
   return (
     <div>
       <Announcement />

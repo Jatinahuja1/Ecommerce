@@ -25,7 +25,7 @@ export const sliderItems = [
 export const categories = [
   {
     id: 1,
-    img: "https://www.freegreatpicture.com/files/photo104/51828-blue-jeans-white-vest-girls.jpg",
+    img: "https://fashionisers.com/wp-content/uploads/2015/03/7-Pieces-You-Need-to-Embrace-the-1970s-Fashion-Trend-woman-in-trendy-suede-skirt.jpg",
     title: "GIRLS WEAR!",
   },
   {
@@ -55,7 +55,7 @@ export const popularProducts = [
   },
   {
     id: 4,
-    img: "https://www.freegreatpicture.com/files/photo104/51828-blue-jeans-white-vest-girls.jpg",
+    img: "https://fashionisers.com/wp-content/uploads/2015/03/7-Pieces-You-Need-to-Embrace-the-1970s-Fashion-Trend-woman-in-trendy-suede-skirt.jpg",
   },
   {
     id: 5,
@@ -66,3 +66,4 @@ export const popularProducts = [
     img: "https://www.pngkey.com/png/detail/366-3661819_religion-leather-jackets-men.png",
   },
 ];
+
