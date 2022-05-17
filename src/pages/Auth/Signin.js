@@ -1,16 +1,8 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-// import Button from "react-bootstrap/Button";
 import "./Signin.css";
 import { useNavigate } from "react-router-dom";
 import Home from "../Home";
-
-
-
-
-
-// import { useNavigate } from "react-router-dom";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -18,13 +10,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 
+export default function   Signin(props) {
 
+  // const [open, setOpen] = React.useState(false);
 
-
-export default function Signin() {
-
-
-  const [open, setOpen] = React.useState(false);
+  let setOpen = props.setOpen;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,21 +23,12 @@ export default function Signin() {
   const handleToClose = () => {
     setOpen(false);
   };
-
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
-
-  const navigate = useNavigate();
-
-  const pages = () => {
-    console.log("move page");
-    navigate("/Home");
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -69,8 +50,12 @@ export default function Signin() {
         setPassword("");
         console.log("res", resJson);
         if (resJson.success === true) {
+          handleToClose();
           console.log("User login");
-          pages();
+          console.log(resJson.data);
+          var Data = resJson.data;
+          localStorage.setItem('user', JSON.stringify(Data));
+
         } else {
           alert(resJson.message);
           console.log("Error");
@@ -85,52 +70,14 @@ export default function Signin() {
 
   return (
     <div className="Login">
-
-
-      <Dialog open={open} onClose={handleToClose}>
-        <DialogTitle>{"How are you?"}</DialogTitle>
-		<DialogContent>
-		<DialogContentText>
-			I am Good, Hope the same for you!
-		</DialogContentText>
-		</DialogContent>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group size="lg" controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              autoFocus
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group size="lg" controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-          <Button block size="lg" type="submit" disabled={!validateForm()}>
-            Login
-          </Button>
-        </Form>
-        <DialogActions>
-          <Button onClick={handleToClose} color="primary" autoFocus>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* <h1>Shopping Mall</h1> */}
-     {/* <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group size="lg" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
             autoFocus
             type="email"
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
@@ -139,13 +86,14 @@ export default function Signin() {
           <Form.Control
             type="password"
             value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <Button block size="lg" type="submit"  disabled={!validateForm()}>
           Login
         </Button>
-      </Form>  */}
-    </div>
+      </Form> 
+  </div> 
   );
 }
