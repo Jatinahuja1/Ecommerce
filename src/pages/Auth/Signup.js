@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
 import Home from '../Home';
+import Button from "@material-ui/core/Button";
 
-function App() {
+function Signup(props) {
 
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
+  let setOpen = props.setOpenRegister;
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleToClose = () => {
+    console.log("Close dialogue");
     setOpen(false);
   };
 
@@ -20,7 +23,6 @@ function App() {
   const [username, setUserName] = useState("");
   const [email_id, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const handleFirstnameChange = (e) => {
     setFirstName(e.target.value);
@@ -41,7 +43,6 @@ function App() {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-
 
   const navigate = useNavigate();
 
@@ -69,7 +70,7 @@ function App() {
           password: password,
         }),
       });
-      console.log("res", res);
+
       let resJson = await res.json();
       if (res.status === 201) {
         setFirstName("");
@@ -78,7 +79,8 @@ function App() {
         setEmail("");
         setPassword("");
         console.log("data saved succesfully");
-        pages();
+        handleToClose();
+        
       } else {
         alert(resJson.message)
         console.log("error in inserting user");
@@ -151,14 +153,13 @@ function App() {
             }}
           />
           <br />
-          <input type="submit" value="Submit" />
-          
-        </form>
       
+          <input type="submit" value="Submit"/>
+        </form>  
       </header>
     </div>
   );
 }
 
-export default App;
+export default Signup;
 

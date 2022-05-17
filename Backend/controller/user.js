@@ -1,13 +1,28 @@
 var express = require("express");
 var router = express.Router();
 const bcrypt = require("bcrypt");
+var jwt = require('jsonwebtoken');
 const userModel = require("../model/model");
 var bodyParser = require("body-parser");
+// const dotenv = require('dotenv');
 const { Compressor } = require("mongodb");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
+// dotenv.config();
+
+const JWT_SECRET_KEY = "gfg_jwt_secret_key";
+const dotenv = require('dotenv');
 
 module.exports = {
+
+
+
+
+
+
+
+
+
   /**
    * userController.register()
    */
@@ -38,9 +53,20 @@ module.exports = {
       }
       const user = new userModel(req.body);
 
+
+      
       await user.save();
       console.log("user", user);
       console.log("Saved");
+
+      var token = jwt.sign(
+        { user_id: user._id },
+        // process.env.TOKEN_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+
       return res.status(201).send(user);
     } catch (error) {
       console.error("error", error);
@@ -74,13 +100,13 @@ module.exports = {
         } else {
           res.status(200).send({
             success: false,
-            message: "password does not match",
+            message: "Password is incorrect",
           });
         }
       } else {
         res.status(200).send({
           success: false,
-          message: "email does not exist",
+          message: "Email does not exist",
         });
       }
     } catch (err) {
