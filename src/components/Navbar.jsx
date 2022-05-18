@@ -68,7 +68,7 @@ const MenuItem = styled.div`
   margin-left: 25px;
 `;
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickToOpen = () => {
@@ -93,7 +93,13 @@ const Navbar = () => {
 
   useEffect(()=>{
     if(localStorage.getItem("user")){
-      setUserName(JSON.parse(localStorage.getItem("user")).username) ;
+            // var  timesession = JSON.parse(localStorage.getItem("user")).time 
+            
+      setUserName(JSON.parse(localStorage.getItem("user")).username);
+      console.log("useEffect",JSON.parse(localStorage.getItem("user")).username);
+      // setUserName(JSON.parse(localStorage.getItem("Data")).username) ;
+      // if(localStorage.getItem(`${props.Data.username}`)){
+      //   setUserName(JSON.parse(localStorage.getItem(`${props.Data.username}`)).username) ;
     }
   },[]);
 

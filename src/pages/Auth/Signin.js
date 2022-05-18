@@ -10,8 +10,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 
-export default function   Signin(props) {
-
+export default function Signin(props) {
   // const [open, setOpen] = React.useState(false);
 
   let setOpen = props.setOpen;
@@ -54,8 +53,37 @@ export default function   Signin(props) {
           console.log("User login");
           console.log(resJson.data);
           var Data = resJson.data;
-          localStorage.setItem('user', JSON.stringify(Data));
+          console.log("Data.token", Data.token);
+          // console.log(
+          //   "localStorage.getItem.token",
+          //   JSON.parse(localStorage.getItem("user")).token
+          // );
 
+          var token = localStorage.getItem(Data.token);
+
+          console.log("token", token);
+          if(!token){
+          localStorage.setItem("user", JSON.stringify(Data));
+            // localStorage.setItem(`${Data.username}`, JSON.stringify(Data));
+          }else{
+            var getData = JSON.parse(localStorage.getItem("user")).token;
+            console.log("getData",getData);
+          }
+          // var token = localStorage.getItem("Data");
+          // console.log("token get", token)
+          // console.log(JSON.parse(localStorage.getItem("Data")).token);
+
+          // var tokenCompare = ((Data.token) === (localStorage.getItem("user").token));
+          // console.log("tokenCompare",tokenCompare);
+
+          // if(tokenCompare){
+
+          // }
+          // localStorage.setItem("user", JSON.stringify(Data));
+          // console.log(
+          //   "localStorage.getItem.token",
+          //   JSON.parse(localStorage.getItem("user")).token
+          // );
         } else {
           alert(resJson.message);
           console.log("Error");
@@ -90,10 +118,10 @@ export default function   Signin(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit"  disabled={!validateForm()}>
+        <Button block size="lg" type="submit" disabled={!validateForm()}>
           Login
         </Button>
-      </Form> 
-  </div> 
+      </Form>
+    </div>
   );
 }
