@@ -4,24 +4,16 @@ const bcrypt = require("bcrypt");
 var jwt = require('jsonwebtoken');
 const userModel = require("../model/model");
 var bodyParser = require("body-parser");
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const { Compressor } = require("mongodb");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-// dotenv.config();
+require('dotenv').config();
 
-const JWT_SECRET_KEY = "gfg_jwt_secret_key";
-const dotenv = require('dotenv');
+const TOKEN_KEY = "gfg_jwt_secret_key";
+
 
 module.exports = {
-
-
-
-
-
-
-
-
 
   /**
    * userController.register()
@@ -52,21 +44,25 @@ module.exports = {
         });
       }
       const user = new userModel(req.body);
-
+console.log("user=>",user)
 
       
-      await user.save();
-      console.log("user", user);
-      console.log("Saved");
+      // await user.save();
+     
 
-      var token = jwt.sign(
-        { user_id: user._id },
-        // process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
-
+    const token = jwt.sign(
+      { _id: user._id },
+      `${process.env.JWT_TOKEN}`,
+      {
+        expiresIn: "2h",
+      }
+    );
+    console.log("token",token);
+    // save user token
+    user.token = token;
+    await user.save();
+    console.log("user", user);
+    console.log("Saved");
       return res.status(201).send(user);
     } catch (error) {
       console.error("error", error);

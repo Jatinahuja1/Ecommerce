@@ -9,7 +9,8 @@ const schema = new Schema({
     email_id: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    createdDate: { type: Date, default: Date.now }
+    createdDate: { type: Date, default: Date.now },
+    token: { type: String ,required: true},
 });
 
 schema.set('toJSON', {
