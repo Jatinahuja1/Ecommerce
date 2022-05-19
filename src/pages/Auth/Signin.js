@@ -29,6 +29,10 @@ export default function Signin(props) {
     return email.length > 0 && password.length > 0;
   }
 
+  function forgotPassword(){
+
+        }
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -53,37 +57,23 @@ export default function Signin(props) {
           console.log("User login");
           console.log(resJson.data);
           var Data = resJson.data;
+          console.log("Data", Data);
           console.log("Data.token", Data.token);
-          // console.log(
-          //   "localStorage.getItem.token",
-          //   JSON.parse(localStorage.getItem("user")).token
-          // );
-
-          var token = localStorage.getItem(Data.token);
-
-          console.log("token", token);
-          if(!token){
-          localStorage.setItem("user", JSON.stringify(Data));
-            // localStorage.setItem(`${Data.username}`, JSON.stringify(Data));
-          }else{
-            var getData = JSON.parse(localStorage.getItem("user")).token;
-            console.log("getData",getData);
-          }
-          // var token = localStorage.getItem("Data");
-          // console.log("token get", token)
-          // console.log(JSON.parse(localStorage.getItem("Data")).token);
-
-          // var tokenCompare = ((Data.token) === (localStorage.getItem("user").token));
-          // console.log("tokenCompare",tokenCompare);
-
-          // if(tokenCompare){
-
-          // }
-          // localStorage.setItem("user", JSON.stringify(Data));
-          // console.log(
-          //   "localStorage.getItem.token",
-          //   JSON.parse(localStorage.getItem("user")).token
-          // );
+          const localData = {
+            email_id: Data.email_id,
+            firstName: Data.firstName,
+            id: Data.id,
+            lastName: Data.lastName,
+            password: Data.password,
+            token: Data.token,
+            username: Data.username,
+            loginTime: new Date().toLocaleString(),
+            timeOut: new Date(
+              new Date().setHours(new Date().getHours() + 2)
+            ).toLocaleString(),
+          };
+          console.log("localData", localData);
+          localStorage.setItem("user", JSON.stringify(localData));
         } else {
           alert(resJson.message);
           console.log("Error");
@@ -121,6 +111,7 @@ export default function Signin(props) {
         <Button block size="lg" type="submit" disabled={!validateForm()}>
           Login
         </Button>
+        {/* <Button block size="lg" onClick={forgotPassword}>FORGOT PASSWORD</Button> */}
       </Form>
     </div>
   );

@@ -1,31 +1,31 @@
 var express = require("express");
 var router = express.Router();
 const bcrypt = require("bcrypt");
-var jwt = require('jsonwebtoken');
+var jwt = require("jsonwebtoken");
 const userModel = require("../model/model");
+const { mailer } = require("../config/send-email");
+
 var bodyParser = require("body-parser");
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 const { Compressor } = require("mongodb");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-require('dotenv').config();
+require("dotenv").config();
 
 const TOKEN_KEY = "gfg_jwt_secret_key";
 
-
 module.exports = {
-
   /**
    * userController.register()
    */
   register: async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     try {
       console.log("working2");
       let userCheck = await userModel.findOne({
         username: req.body.username,
       });
-
+      console.log("userCheck", userCheck);
       let emailCheck = await userModel.findOne({
         email_id: req.body.email_id,
       });
@@ -44,25 +44,18 @@ module.exports = {
         });
       }
       const user = new userModel(req.body);
-console.log("user=>",user)
+      console.log("user=>", user);
 
-      
       // await user.save();
-     
-
-    const token = jwt.sign(
-      { _id: user._id },
-      `${process.env.JWT_TOKEN}`,
-      {
+      const token = jwt.sign({ _id: user._id }, `${process.env.JWT_TOKEN}`, {
         expiresIn: "2h",
-      }
-    );
-    console.log("token",token);
-    // save user token
-    user.token = token;
-    await user.save();
-    console.log("user", user);
-    console.log("Saved");
+      });
+      console.log("token", token);
+      // save user token
+      user.token = token;
+      await user.save();
+      console.log("user", user);
+      console.log("Saved");
       return res.status(201).send(user);
     } catch (error) {
       console.error("error", error);
@@ -110,6 +103,72 @@ console.log("user=>",user)
         success: false,
         message: "Something went wrong",
       });
+    }
+  },
+
+  /**
+   * userController.forgotPassword()
+   */
+  forgotPassword: async function (req, res) {
+    console.log("req.body", req.body);
+    let checkUser, mailData;
+    try {
+      checkUser = await userModel.findOne({
+        email: req.body.email_id,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(200).json({
+        error: err,
+        status: false,
+        message: "Something went wrong",
+      });
+    }
+    if (checkUser) {
+      try {
+        let verifyToken = generateRandomOtp(4);
+        const updateUser = await userModel.findOneAndUpdate(
+          { _id: checkUser.id },
+          { otp: verifyToken },
+          { new: true }
+        );
+        // checkUser.token = encode(checkUser._id);
+        // await checkUser.save();
+        mailData = {
+          to: checkUser.email,
+          subject: "Forgot Password",
+          template: "Forgot Password",
+          // data: {
+          //     name: checkUser.name,
+          //     url: `http://chatapp.softuvo.xyz/api/v1/user/forgotPassword/${verifyToken}/${checkUser._id}`
+          // }
+        };
+        mailer.sendMail(mailData);
+        return res.status(200).json({
+          status: true,
+          message: "A password has been sent to your mail",
+        });
+      } catch (err) {
+        console.log(err);
+        return res.status(200).json({
+          error: err,
+          status: false,
+          message: "Something went wrong",
+        });
+      }
+    } else {
+      return res.status(200).json({
+        status: false,
+        message: "User not found",
+      });
+    }
+    function generateRandomOtp(length = 4) {
+      let OTP = "";
+      let digits = "0123456789";
+      for (let i = 0; i < length; i++) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+      }
+      return OTP;
     }
   },
 };

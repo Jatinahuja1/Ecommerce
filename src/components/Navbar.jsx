@@ -88,20 +88,44 @@ const Navbar = (props) => {
   const handleToCloseRegister = () => {
     setOpenRegister(false);
   };
-  
-  const[userName,setUserName] = useState("");
 
-  useEffect(()=>{
-    if(localStorage.getItem("user")){
-            // var  timesession = JSON.parse(localStorage.getItem("user")).time 
-            
-      setUserName(JSON.parse(localStorage.getItem("user")).username);
-      console.log("useEffect",JSON.parse(localStorage.getItem("user")).username);
-      // setUserName(JSON.parse(localStorage.getItem("Data")).username) ;
-      // if(localStorage.getItem(`${props.Data.username}`)){
-      //   setUserName(JSON.parse(localStorage.getItem(`${props.Data.username}`)).username) ;
+  const [removeuser, setRemoveUser] = React.useState(false);
+
+  const handleClickToRemoveUser = () => {
+    // setRemoveUser(true);
+    localStorage.removeItem("user");
+  };
+
+  const [userName, setUserName] = useState("");
+
+  // useEffect(()=>{
+  //   if(localStorage.getItem("user")){
+  //           // var  timesession = JSON.parse(localStorage.getItem("user")).time
+
+  //     setUserName(JSON.parse(localStorage.getItem("user")).username);
+  //     console.log("useEffect",JSON.parse(localStorage.getItem("user")).username);
+  //     // setUserName(JSON.parse(localStorage.getItem("Data")).username) ;
+  //     // if(localStorage.getItem(`${props.Data.username}`)){
+  //     //   setUserName(JSON.parse(localStorage.getItem(`${props.Data.username}`)).username) ;
+  //   }
+  // },[]);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      var getTimeOut = JSON.parse(localStorage.getItem("user")).timeOut;
+
+      var refreshTime = new Date().toLocaleString();
+      console.log("getTimeOut", getTimeOut);
+      console.log("new Time", refreshTime);
+      
+
+      if (getTimeOut > refreshTime) {
+        setUserName(JSON.parse(localStorage.getItem("user")).username);
+      } else {
+        localStorage.removeItem("user");
+      }
     }
-  },[]);
+  }, []);
 
   return (
     <Container>
@@ -118,32 +142,42 @@ const Navbar = (props) => {
           <Logo>Shop Mall</Logo>
         </Center>
         <Right>
-          {userName !== ""?
-          <button>{userName}</button>:
-          <div>
-            <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleClickToOpen}
-          >
-            SIGN IN
-          </Button>
-          <Dialog open={open} onClose={handleToClose}>
-            <Signin setOpen={setOpen} />
-          </Dialog>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleClickToOpenRegister}
-          >
-            SIGN UP
-          </Button>
-          <Dialog open={openregister} onClose={handleToCloseRegister}>
-            <Signup setOpenRegister={setOpenRegister} />
-          </Dialog>
-          </div>
-          }
-          
+          {userName !== "" ? (
+            <div>
+              <button>{userName}</button>
+              <Button
+                // variant="outlined"
+                color="primary"
+                onClick={handleClickToRemoveUser}
+              >
+                LOGOUT
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleClickToOpen}
+              >
+                SIGN IN
+              </Button>
+              <Dialog open={open} onClose={handleToClose}>
+                <Signin setOpen={setOpen} />
+              </Dialog>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleClickToOpenRegister}
+              >
+                SIGN UP
+              </Button>
+              <Dialog open={openregister} onClose={handleToCloseRegister}>
+                <Signup setOpenRegister={setOpenRegister} />
+              </Dialog>
+            </div>
+          )}
+
           <MenuItem>
             <Badge badgeContent={4} color="primary">
               <ShoppingCartOutlined />
