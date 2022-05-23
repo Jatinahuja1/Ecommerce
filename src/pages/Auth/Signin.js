@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import "./Signin.css";
+import GoogleButton from "react-google-button";
 import { useNavigate } from "react-router-dom";
 import Home from "../Home";
 import Dialog from "@material-ui/core/Dialog";
@@ -29,10 +30,8 @@ export default function Signin(props) {
     return email.length > 0 && password.length > 0;
   }
 
-  function forgotPassword(){
+  function forgotPassword() {}
 
-        }
-  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -108,9 +107,16 @@ export default function Signin(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <Button block size="lg" type="submit">
           Login
         </Button>
+        <div>
+          <GoogleButton
+            onClick={() => {
+              console.log("Google button clicked");
+            }}
+          />
+        </div>
         {/* <Button block size="lg" onClick={forgotPassword}>FORGOT PASSWORD</Button> */}
       </Form>
     </div>
