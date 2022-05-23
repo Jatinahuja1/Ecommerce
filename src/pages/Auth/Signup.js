@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
-import Home from '../Home';
+import GoogleButton from "react-google-button";
+
+import Home from "../Home";
 import Button from "@material-ui/core/Button";
 
 function Signup(props) {
-
   // const [open, setOpen] = React.useState(false);
   let setOpen = props.setOpenRegister;
 
@@ -44,12 +45,29 @@ function Signup(props) {
     setPassword(e.target.value);
   };
 
-  const navigate = useNavigate();
 
   const pages = () => {
-    console.log("move page")
-    navigate('/Home');
-}
+    console.log("move page");
+    navigate("/Home");
+  };
+
+  // const socialLogin = async (e) => {
+  //   console.log("social-Login");
+  //   e.preventDefault();
+  //   console.log("submit login");
+  // }
+
+
+  const navigate = useNavigate();
+    // function socialLogin() {
+    //   const navigate = useNavigate();
+    //   };
+    
+      function handleClick() {
+        navigate("/auth/google/callback");
+      }
+    
+  
 
   const handleSubmit = async (e) => {
     console.log("e", e);
@@ -80,9 +98,8 @@ function Signup(props) {
         setPassword("");
         console.log("data saved succesfully");
         handleToClose();
-        
       } else {
-        alert(resJson.message)
+        alert(resJson.message);
         console.log("error in inserting user");
       }
     } catch (err) {
@@ -153,13 +170,21 @@ function Signup(props) {
             }}
           />
           <br />
-      
-          <input type="submit" value="Submit"/>
-        </form>  
+
+          <input type="submit" value="Submit" />
+        </form>
       </header>
+      <div>
+        <GoogleButton
+          onClick={(e) => {
+            handleClick(e);
+            console.log("Google button clicked");
+          }}
+        />
+      </div>
     </div>
   );
 }
 
-export default Signup;
 
+export default Signup;
