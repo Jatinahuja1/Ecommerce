@@ -33,7 +33,7 @@ module.exports = {
       if (emailCheck) {
         return res.status(400).json({
           error: true,
-          message: "Email is already in use",
+          message: "Email already exist",
         });
       }
 
@@ -45,13 +45,10 @@ module.exports = {
       }
       const user = new userModel(req.body);
       console.log("user=>", user);
-
-      // await user.save();
       const token = jwt.sign({ _id: user._id }, `${process.env.JWT_TOKEN}`, {
         expiresIn: "2h",
       });
       console.log("token", token);
-      // save user token
       user.token = token;
       await user.save();
       console.log("user", user);
@@ -70,6 +67,7 @@ module.exports = {
    * userController.login()
    * */
   login: async (req, res) => {
+    console.log("login", req.body);
     try {
       let bodyData = req.body;
       let result = await userModel.findOne({ email_id: bodyData.email_id });
@@ -132,16 +130,11 @@ module.exports = {
           { otp: verifyToken },
           { new: true }
         );
-        // checkUser.token = encode(checkUser._id);
-        // await checkUser.save();
+
         mailData = {
           to: checkUser.email,
           subject: "Forgot Password",
           template: "Forgot Password",
-          // data: {
-          //     name: checkUser.name,
-          //     url: `http://chatapp.softuvo.xyz/api/v1/user/forgotPassword/${verifyToken}/${checkUser._id}`
-          // }
         };
         mailer.sendMail(mailData);
         return res.status(200).json({

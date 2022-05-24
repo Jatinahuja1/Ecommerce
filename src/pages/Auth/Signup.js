@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom";
+import { Magic } from "magic-sdk";
+import { OAuthExtension } from "@magic-ext/oauth";
 import GoogleButton from "react-google-button";
 
 import Home from "../Home";
 import Button from "@material-ui/core/Button";
 
+const magic = new Magic("pk_live_E9CF1DD886ADAB22", {
+  extensions: [new OAuthExtension()],
+});
+
 function Signup(props) {
-  // const [open, setOpen] = React.useState(false);
   let setOpen = props.setOpenRegister;
 
   const handleClickOpen = () => {
@@ -45,29 +50,20 @@ function Signup(props) {
     setPassword(e.target.value);
   };
 
-
   const pages = () => {
     console.log("move page");
     navigate("/Home");
   };
 
-  // const socialLogin = async (e) => {
-  //   console.log("social-Login");
-  //   e.preventDefault();
-  //   console.log("submit login");
-  // }
-
-
   const navigate = useNavigate();
-    // function socialLogin() {
-    //   const navigate = useNavigate();
-    //   };
-    
-      function handleClick() {
-        navigate("/auth/google/callback");
-      }
-    
-  
+
+  const handleClick = async (email) => {
+    const didToken = await magic.oauth.loginWithRedirect({
+      provider: "google",
+      email,
+      redirectURI: new URL("/home", window.location.origin).href,
+    });
+  };
 
   const handleSubmit = async (e) => {
     console.log("e", e);
@@ -77,7 +73,7 @@ function Signup(props) {
     console.log("submit");
     try {
       console.log("API fetch");
-      let res = await fetch("http://localhost:3002/register", {
+      let res = await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -88,7 +84,6 @@ function Signup(props) {
           password: password,
         }),
       });
-
       let resJson = await res.json();
       if (res.status === 201) {
         setFirstName("");
@@ -170,7 +165,6 @@ function Signup(props) {
             }}
           />
           <br />
-
           <input type="submit" value="Submit" />
         </form>
       </header>
@@ -185,6 +179,4 @@ function Signup(props) {
     </div>
   );
 }
-
-
 export default Signup;

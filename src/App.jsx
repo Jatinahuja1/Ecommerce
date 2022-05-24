@@ -26,6 +26,7 @@ function App() {
               <Route path="/signin" element={<Signin/>} />
               <Route path="/signup" element={<Signup/>} />
               <Route path="/home" element= {<Home/>} />
+              <Route path="/callback" element= {<Home/>} />
             </Routes>
           </div>
         </div>
