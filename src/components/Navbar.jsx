@@ -6,6 +6,8 @@ import {
 } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import { Badge } from "@material-ui/core";
+import { OAuthExtension } from "@magic-ext/oauth";
+import { Magic } from "magic-sdk";
 import Signin from "../pages/Auth/Signin";
 import Signup from "../pages/Auth/Signup";
 
@@ -92,33 +94,148 @@ const Navbar = (props) => {
   const [removeuser, setRemoveUser] = React.useState(false);
 
   const handleClickToRemoveUser = () => {
-    // setRemoveUser(true);
     localStorage.removeItem("user");
   };
 
   const [userName, setUserName] = useState("");
 
-  // useEffect(()=>{
-  //   if(localStorage.getItem("user")){
-  //           // var  timesession = JSON.parse(localStorage.getItem("user")).time
+  const magic = new Magic("pk_live_E9CF1DD886ADAB22", {
+    extensions: [new OAuthExtension()],
+  });
 
-  //     setUserName(JSON.parse(localStorage.getItem("user")).username);
-  //     console.log("useEffect",JSON.parse(localStorage.getItem("user")).username);
-  //     // setUserName(JSON.parse(localStorage.getItem("Data")).username) ;
-  //     // if(localStorage.getItem(`${props.Data.username}`)){
-  //     //   setUserName(JSON.parse(localStorage.getItem(`${props.Data.username}`)).username) ;
-  //   }
-  // },[]);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("provider"))
+      finishSocialLogin();
+  });
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const [email_id, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleFirstnameChange = (e) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleLastnameChange = (e) => {
+    setLastName(e.target.value);
+  };
+
+  const handleUserNameChange = (e) => {
+    setUserName(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const finishSocialLogin = async () => {
+    let result = await magic.oauth.getRedirectResult();
+    const payload = {
+      firstName: result.oauth.userInfo.givenName,
+      lastName: result.oauth.userInfo.familyName,
+      email: result.oauth.userInfo.email,
+      isSocial: true,
+      token: localStorage.getItem("jwt_token"),
+    };
+    console.log("payload====>", payload.email);
+    console.log("payload====>", payload);
+    setFirstName("");
+    setLastName("");
+    setUserName("");
+    setEmail("");
+    console.log("data saved succesfully");
+    var Data = payload;
+    console.log("Data", Data);
+    console.log("Data.token", Data.token);
+    const localData = {
+      email_id: payload.email,
+      firstName: payload.firstName,
+      id: Data.id,
+      lastName: payload.lastName,
+      token: Data.token,
+      username: payload.firstName,
+      loginTime: new Date().toLocaleString(),
+      timeOut: new Date(
+        new Date().setHours(new Date().getHours() + 2)
+      ).toLocaleString(),
+    };
+    console.log("localData", localData);
+    localStorage.setItem("user", JSON.stringify(localData));
+    handleToClose();
+
+    // try {
+    //   console.log("API fetch");
+    //   let res = await fetch("http://localhost:3000/register", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       firstName: payload.firstName,
+    //       lastName: payload.lastName,
+    //       username: payload.firstName,
+    //       email_id: payload.email,
+    //       // password: "password",
+    //     }),
+    //   });
+    //   let resJson = await res.json();
+    //   console.log("resJson", resJson);
+    //   if (res.status === 201) {
+    //     setFirstName("");
+    //     setLastName("");
+    //     setUserName("");
+    //     setEmail("");
+    //     // setPassword("");
+    //     console.log("data saved succesfully");
+    //     var Data = resJson;
+    //     console.log("Data", Data);
+    //     console.log("Data.token", Data.token);
+    //     const localData = {
+    //       email_id: Data.email_id,
+    //       firstName: Data.firstName,
+    //       id: Data.id,
+    //       lastName: Data.lastName,
+    //       password: Data.password,
+    //       token: Data.token,
+    //       username: Data.username,
+    //       loginTime: new Date().toLocaleString(),
+    //       timeOut: new Date(
+    //         new Date().setHours(new Date().getHours() + 2)
+    //       ).toLocaleString(),
+    //     };
+    //     console.log("localData", localData);
+    //     localStorage.setItem("user", JSON.stringify(localData));
+    //     handleToClose();
+    //   } else {
+    //     // let res = await fetch("http://localhost:3000/login", {
+    //     //   method: "POST",
+    //     //   headers: { "Content-Type": "application/json" },
+    //     //   body: JSON.stringify({
+    //     //     email_id: payload.email,
+    //     //     // password: password,
+    //     //   }),
+    //     // });
+    //     alert(`${resJson.message} Please Sign in`);
+    //     // console.log("error in inserting user");
+
+    //     // let resJson = await res.json();
+    //     console.log("resJson", resJson);
+    //   }
+    // } catch (err) {
+    //   console.log("err", err);
+    // }
+  };
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
       var getTimeOut = JSON.parse(localStorage.getItem("user")).timeOut;
-
       var refreshTime = new Date().toLocaleString();
       console.log("getTimeOut", getTimeOut);
       console.log("new Time", refreshTime);
-      
-
       if (getTimeOut > refreshTime) {
         setUserName(JSON.parse(localStorage.getItem("user")).username);
       } else {

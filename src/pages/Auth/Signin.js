@@ -10,10 +10,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
+import { Magic } from "magic-sdk";
+import { OAuthExtension } from "@magic-ext/oauth";
 
 export default function Signin(props) {
-  // const [open, setOpen] = React.useState(false);
-
   let setOpen = props.setOpen;
 
   const handleClickOpen = () => {
@@ -30,7 +30,19 @@ export default function Signin(props) {
     return email.length > 0 && password.length > 0;
   }
 
-  function forgotPassword() {}
+  const magic = new Magic("pk_live_E9CF1DD886ADAB22", {
+    extensions: [new OAuthExtension()],
+  });
+
+  const handleClick = async (email) => {
+    const didToken = await magic.oauth.loginWithRedirect({
+      provider: "google",
+      email,
+      redirectURI: new URL("/home", window.location.origin).href,
+    });
+    console.log("didToken", didToken);
+    console.log(didToken);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -38,7 +50,7 @@ export default function Signin(props) {
     try {
       console.log("API fetch");
 
-      let res = await fetch("http://localhost:3002/login", {
+      let res = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -112,12 +124,12 @@ export default function Signin(props) {
         </Button>
         <div>
           <GoogleButton
-            onClick={() => {
+            onClick={(e) => {
+              handleClick(e);
               console.log("Google button clicked");
             }}
           />
         </div>
-        {/* <Button block size="lg" onClick={forgotPassword}>FORGOT PASSWORD</Button> */}
       </Form>
     </div>
   );

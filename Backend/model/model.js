@@ -2,17 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
+const passportLocalMongoose = require("passport-local-mongoose");
+const findOrCreate = require('mongoose-findorcreate');
 
 const schema = new Schema({
     username: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
+    password: { type: String },
     email_id: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    googleId:{},
+    googleId:{ type: String },
     createdDate: { type: Date, default: Date.now },
     token: { type: String ,required: true},
 });
+
+schema.plugin(passportLocalMongoose);
+schema.plugin(findOrCreate);
 
 schema.set('toJSON', {
     virtuals: true,

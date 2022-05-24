@@ -5,13 +5,15 @@ const db = require('./config/db');
 const {model}= require('./model/model');
 const cors = require('cors');
 const bodyParser = require('body-parser')
-var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
-var passport = require('passport');
-var LocalStrategy = require('passport-local');
+const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+var passport = require("passport");
+// var LocalStrategy = require('passport-local');
+const findOrCreate = require('mongoose-findorcreate');
 const userModel = require("./model/model");
 
 var session = require('express-session');
-var SQLiteStore = require('connect-sqlite3')(session);
+// var SQLiteStore = require('connect-sqlite3')(session);
 app.use(bodyParser.json())
 app.use(cors());
 app.use('/', routes );
@@ -23,11 +25,11 @@ var jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 // require.dotenv.config();
 
-app.use(session({
-  resave: false,
-  saveUninitialized: true,
-  secret: 'SECRET' 
-}));
+// app.use(session({
+//   resave: false,
+//   saveUninitialized: true,
+//   secret: 'SECRET' 
+// }));
 
 
 
@@ -38,9 +40,55 @@ app.use(session({
 //   saveUninitialized: false,
 //   // store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' })
 // }));
-app.use(passport.authenticate('session'));
+// app.use(passport.authenticate('session'));
 
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(userModel.createStrategy());
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  userModel.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new GoogleStrategy({
+  clientID: "596391413342-k40jikpf6dc061dvuplv6jdfbeassblo.apps.googleusercontent.com",
+  clientSecret: "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",
+  callbackURL: "http://localhost:3001/home",
+  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+},
+function(accessToken, refreshToken, profile, cb) {
+  console.log(profile);
+
+  userModel.findOrCreate({ googleId: profile.id }, function (err, user) {
+    return cb(err, user);
+  });
+}
+));
+
+app.get("/auth/google",
+  passport.authenticate('google', { scope: ["profile"] })
+);
+
+app.get("/auth/google/home",
+  passport.authenticate('google', { failureRedirect: "/login" }),
+  function(req, res) {
+
+    // res.redirect("/home");
+    res.send('Hello World!')
+  });
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -89,47 +137,47 @@ app.get('/', (req, res) => {
 
 
 
-var userProfile;
+// var userProfile;
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => res.send(userProfile));
-app.get('/', (req, res) => res.send("error logging in"));
+// app.get('/', (req, res) => res.send(userProfile));
+// app.get('/', (req, res) => res.send("error logging in"));
 
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
+// passport.serializeUser(function(user, cb) {
+//   cb(null, user);
+// });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
+// passport.deserializeUser(function(obj, cb) {
+//   cb(null, obj);
+// });
 
 // const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 // const GOOGLE_CLIENT_ID = 'our-google-client-id';
 // const GOOGLE_CLIENT_SECRET = 'our-google-client-secret';
-passport.use(new GoogleStrategy({
-    clientID: "596391413342-k40jikpf6dc061dvuplv6jdfbeassblo.apps.googleusercontent.com",
-    clientSecret: "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",
-    callbackURL: "http://localhost:3000/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-      userProfile=profile;
-      return done(null, userProfile);
-  }
-));
+// passport.use(new GoogleStrategy({
+//     clientID: "596391413342-k40jikpf6dc061dvuplv6jdfbeassblo.apps.googleusercontent.com",
+//     clientSecret: "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",
+//     callbackURL: "http://localhost:3000/auth/google/callback"
+//   },
+//   function(accessToken, refreshToken, profile, done) {
+//       userProfile=profile;
+//       return done(null, userProfile);
+//   }
+// ));
  
-app.get('/auth/google', 
-  passport.authenticate('google', { scope : ['profile', 'email'] }));
+// app.get('/auth/google', 
+//   passport.authenticate('google', { scope : ['profile', 'email'] }));
  
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/' }),
-  function(req, res) {
-    // Successful authentication, redirect success.
-    res.redirect('/');
-  });
+// app.get('/auth/google/callback', 
+//   passport.authenticate('google', { failureRedirect: '/' }),
+//   function(req, res) {
+//     // Successful authentication, redirect success.
+//     res.redirect('/');
+//   });
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
