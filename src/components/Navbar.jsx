@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 import {
   CheckOutlined,
   Search,
@@ -9,6 +11,7 @@ import { Badge } from "@material-ui/core";
 import { OAuthExtension } from "@magic-ext/oauth";
 import { Magic } from "magic-sdk";
 import Signin from "../pages/Auth/Signin";
+import Cart from "../pages/Auth/cart";
 import Signup from "../pages/Auth/Signup";
 
 import Dialog from "@material-ui/core/Dialog";
@@ -244,16 +247,56 @@ const Navbar = (props) => {
     }
   }, []);
 
+  const options = [
+    'ENGLISH', 'HINDI'
+  ];
+
+  const profile = [
+    'Profile', 'Settings',
+  ];
+
+  const defaultOption = options[0];
+
+  const defaultProfileSelection = profile[0];
+
+  const getcardItems = async ()=>{
+    console.log("card click")
+    var userlogin = JSON.parse(localStorage.getItem("user"));
+    console.log("userlogin",userlogin);
+    try {
+      console.log("API fetch");
+      let res = await fetch("http://localhost:3000/get-cart-item", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email_id: userlogin.email_id,
+        }),
+      });
+      console.log(res.body)
+      let resJson = await res.json();
+      console.log("resJson",resJson)
+      if (res.status === 201) {
+        console.log("Cart list fetch Succesfully", resJson)
+      } else {
+        // alert(resJson.message);
+        console.log("error in fetching cart list");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Container>
       <Wrapper>
         {/* Navbar */}
         <Left>
-          <Language>English</Language>
-          <SearchContainer>
-            <Input />
+          {/* <Language>English</Language> */}
+          <Dropdown options={options} value={defaultOption} placeholder="Select an option"/>
+          {/* <SearchContainer> */}
+            {/* <Input />
             <Search style={{ color: "grey", fontSize: 8 }} />
-          </SearchContainer>
+          </SearchContainer> */}
         </Left>
         <Center>
           <Logo>Shop Mall</Logo>
@@ -262,6 +305,9 @@ const Navbar = (props) => {
           {userName !== "" ? (
             <div>
               <button>{userName}</button>
+  
+              
+          {/* <Dropdown defaultProfileSelection={profile}/> */}
               <Button
                 // variant="outlined"
                 color="primary"
@@ -294,10 +340,12 @@ const Navbar = (props) => {
               </Dialog>
             </div>
           )}
-
           <MenuItem>
             <Badge badgeContent={4} color="primary">
               <ShoppingCartOutlined />
+              <Dialog open={openregister} onClose={handleToCloseRegister}>
+                <Signup setOpenRegister={setOpenRegister} />
+              </Dialog>
             </Badge>
           </MenuItem>
         </Right>
