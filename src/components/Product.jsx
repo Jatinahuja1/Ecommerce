@@ -32,7 +32,7 @@ const Container = styled.div`
   background-color: white;
   position: relative;
 
-  &:hover ${Info}{
+  &:hover ${Info} {
     opacity: 1;
   }
 `;
@@ -49,7 +49,6 @@ const Image = styled.img`
   z-index: 2;
 `;
 
-
 const Icon = styled.div`
   width: 40px;
   height: 40px;
@@ -61,11 +60,50 @@ const Icon = styled.div`
   margin: 10px;
   transition: all 0.5s ease;
 
-  &:hover{
+  &:hover {
     background-color: e9f5f5;
-    transform:scale(1.1);
-}
+    transform: scale(1.1);
+  }
 `;
+
+const addCard = async (id,price) => {
+  console.log("items ===>",id,price);
+  console.log("handle submit");
+
+  console.log("submit");
+  
+  var userlogin = JSON.parse(localStorage.getItem("user"));
+  // console.log("serlogin.email_id",userlogin.email_id)
+
+  if(!userlogin  ){
+
+  alert("Please login before adding item to cart");
+  }
+  try {
+    console.log("API fetch");
+    let res = await fetch("http://localhost:3000/add-item-to-cart", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email_id: userlogin.email_id,
+        productId: id,
+        price: price,
+      }),
+    });
+    console.log(res.body)
+    let resJson = await res.json();
+    console.log("resJson",resJson)
+    if (res.status === 201) {
+      console.log("Item added to cart succesafully")
+    } else {
+      // alert(resJson.message);
+      console.log("error in inserting user");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 const Product = ({ item }) => {
   return (
@@ -74,7 +112,12 @@ const Product = ({ item }) => {
         <Image src={item.img} />
         <Info>
           <Icon>
-            <ShoppingCartOutlined />
+            <ShoppingCartOutlined
+              onClick={(e) => {
+                addCard(item.id ,item.price);
+                // console.log("add item09",item.id ,item.price)
+              }}
+            />
           </Icon>
           <Icon>
             <SearchOutlined />

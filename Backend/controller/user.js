@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const userModel = require("../model/model");
 const { mailer } = require("../config/send-email");
-
 var bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { Compressor } = require("mongodb");
