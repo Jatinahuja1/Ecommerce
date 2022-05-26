@@ -11,16 +11,19 @@ import { Badge } from "@material-ui/core";
 import { OAuthExtension } from "@magic-ext/oauth";
 import { Magic } from "magic-sdk";
 import Signin from "../pages/Auth/Signin";
-import Cart from "../pages/Auth/cart";
+import Cart from "../pages/Auth/Cart";
 import Signup from "../pages/Auth/Signup";
+import { useHistory } from "react-router-dom";
 
 import Dialog from "@material-ui/core/Dialog";
 
 import Button from "@material-ui/core/Button";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   height: 60px;
 `;
+
 const Wrapper = styled.div`
   padding: 10px 20px;
   display: flex;
@@ -84,13 +87,23 @@ const Navbar = (props) => {
     setOpen(false);
   };
 
-  const [openregister, setOpenRegister] = React.useState(false);
+  const [openregister, setOpenCart] = React.useState(false);
 
   const handleClickToOpenRegister = () => {
     setOpenRegister(true);
   };
 
   const handleToCloseRegister = () => {
+    setOpenRegister(false);
+  };
+  
+  const [opencart, setOpenRegister] = React.useState(false);
+
+  const handleClickToOpenCart = () => {
+    setOpenRegister(true);
+  };
+
+  const handleToCloseCart = () => {
     setOpenRegister(false);
   };
 
@@ -171,66 +184,6 @@ const Navbar = (props) => {
     console.log("localData", localData);
     localStorage.setItem("user", JSON.stringify(localData));
     handleToClose();
-
-    // try {
-    //   console.log("API fetch");
-    //   let res = await fetch("http://localhost:3000/register", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       firstName: payload.firstName,
-    //       lastName: payload.lastName,
-    //       username: payload.firstName,
-    //       email_id: payload.email,
-    //       // password: "password",
-    //     }),
-    //   });
-    //   let resJson = await res.json();
-    //   console.log("resJson", resJson);
-    //   if (res.status === 201) {
-    //     setFirstName("");
-    //     setLastName("");
-    //     setUserName("");
-    //     setEmail("");
-    //     // setPassword("");
-    //     console.log("data saved succesfully");
-    //     var Data = resJson;
-    //     console.log("Data", Data);
-    //     console.log("Data.token", Data.token);
-    //     const localData = {
-    //       email_id: Data.email_id,
-    //       firstName: Data.firstName,
-    //       id: Data.id,
-    //       lastName: Data.lastName,
-    //       password: Data.password,
-    //       token: Data.token,
-    //       username: Data.username,
-    //       loginTime: new Date().toLocaleString(),
-    //       timeOut: new Date(
-    //         new Date().setHours(new Date().getHours() + 2)
-    //       ).toLocaleString(),
-    //     };
-    //     console.log("localData", localData);
-    //     localStorage.setItem("user", JSON.stringify(localData));
-    //     handleToClose();
-    //   } else {
-    //     // let res = await fetch("http://localhost:3000/login", {
-    //     //   method: "POST",
-    //     //   headers: { "Content-Type": "application/json" },
-    //     //   body: JSON.stringify({
-    //     //     email_id: payload.email,
-    //     //     // password: password,
-    //     //   }),
-    //     // });
-    //     alert(`${resJson.message} Please Sign in`);
-    //     // console.log("error in inserting user");
-
-    //     // let resJson = await res.json();
-    //     console.log("resJson", resJson);
-    //   }
-    // } catch (err) {
-    //   console.log("err", err);
-    // }
   };
 
   useEffect(() => {
@@ -259,32 +212,48 @@ const Navbar = (props) => {
 
   const defaultProfileSelection = profile[0];
 
-  const getcardItems = async ()=>{
-    console.log("card click")
-    var userlogin = JSON.parse(localStorage.getItem("user"));
-    console.log("userlogin",userlogin);
-    try {
-      console.log("API fetch");
-      let res = await fetch("http://localhost:3000/get-cart-item", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email_id: userlogin.email_id,
-        }),
-      });
-      console.log(res.body)
-      let resJson = await res.json();
-      console.log("resJson",resJson)
-      if (res.status === 201) {
-        console.log("Cart list fetch Succesfully", resJson)
-      } else {
-        // alert(resJson.message);
-        console.log("error in fetching cart list");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  const getcartProducts = () => {
+    console.log("move page");
+    navigate("/Cart");
+  };
+
+  const navigate = useNavigate();
+
+  // const navigate = Navigate();
+
+  // const getcartProducts = async ()=>{
+    
+  //   console.log("card click");
+
+
+  // function handleClick() {
+    // navigate("/Cart");
+  // }
+
+    // var userlogin = JSON.parse(localStorage.getItem("user"));
+    // console.log("userlogin",userlogin);
+    // try {
+    //   console.log("API fetch");
+    //   let res = await fetch("http://localhost:3000/get-cart-item", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       email_id: userlogin.email_id,
+    //     }),
+    //   });
+    //   console.log("res.body",res.body)
+    //   let resJson = await res.json();
+    //   console.log("resJson",resJson)
+    //   if (res.status === 201) {
+    //     console.log("Cart list fetch Succesfully", resJson)
+    //   } else {
+    //     // alert(resJson.message);
+    //     console.log("error in fetching cart list");
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  
 
   return (
     <Container>
@@ -342,10 +311,11 @@ const Navbar = (props) => {
           )}
           <MenuItem>
             <Badge badgeContent={4} color="primary">
-              <ShoppingCartOutlined />
-              <Dialog open={openregister} onClose={handleToCloseRegister}>
-                <Signup setOpenRegister={setOpenRegister} />
-              </Dialog>
+              <ShoppingCartOutlined  onClick={getcartProducts}/>
+              {/* <Dialog open={opencart} onClose={handleToCloseCart}> */}
+                {/* <Cart onClick={getcartProducts} /> */}
+                {/* <Cart onClick={handleClickToOpenCart} /> */}
+              {/* </Dialog> */}
             </Badge>
           </MenuItem>
         </Right>
