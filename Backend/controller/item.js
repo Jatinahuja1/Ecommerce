@@ -54,4 +54,21 @@ module.exports = {
         });
     }
   },
+
+  deleteCartItems: async (req, res) => {
+    console.log("test cart List", req.body);
+    try{
+        let cartItems = await itemModel.findOneAndRemove({_id:req.body._id});
+        console.log(cartItems)
+        return res.status(201).send(cartItems);
+    }catch(error){
+        console.error("error", error);
+        return res.status(500).json({
+          error: true,
+          message: "Error in getting items",
+        });
+    }
+  },
+
+
 };

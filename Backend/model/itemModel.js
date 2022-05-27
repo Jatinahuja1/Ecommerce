@@ -6,6 +6,7 @@ const itemSchema = new Schema({
     productId : { type: String},
     price : { type: String , required: true},
     createdDate: { type: Date, default: Date.now },
+    is_deleted :{ }
 });
 
 module.exports = mongoose.model('item', itemSchema);

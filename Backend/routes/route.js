@@ -23,4 +23,7 @@ router.post("/add-item-to-cart", itemController.addItemToCart);
 
 router.post("/get-cart-item", itemController.getCartItems);
 
+router.post("/delete-cart-item", itemController.deleteCartItems);
+
+
 module.exports = router;
