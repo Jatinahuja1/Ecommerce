@@ -107,42 +107,6 @@ const Slider = () => {
             </InfoContainer>
           </Slide>
         ))}
-        {/* <Slide bg="f5fafd">
-          <ImgContainer>
-            <Image src="https://www.pngmart.com/files/1/Mens-Fashion-PNG-Pic.png" />
-          </ImgContainer>
-          <InfoContainer>
-            <Title>SUMMER SALE</Title>
-            <Desc>
-              DON'T COMPOMISE WITH STYLE! GET FLAT 50% OFF FOR NEW ARRIVALS
-            </Desc>
-            <Button>SHOW NOW</Button>
-          </InfoContainer>
-        </Slide> */}
-        {/* <Slide bg="fbf0f4">
-          <ImgContainer>
-            <Image src="https://www.pngmart.com/files/1/Mens-Fashion-PNG-Pic.png" />
-          </ImgContainer>
-          <InfoContainer>
-            <Title>WINTER SALE</Title>
-            <Desc>
-              DON'T COMPOMISE WITH STYLE! GET FLAT 50% OFF FOR NEW ARRIVALS
-            </Desc>
-            <Button>SHOW NOW</Button>
-          </InfoContainer>
-        </Slide>
-        <Slide bg="f5fafd">
-          <ImgContainer>
-            <Image src="https://www.pngmart.com/files/1/Mens-Fashion-PNG-Pic.png" />
-          </ImgContainer>
-          <InfoContainer>
-            <Title>POPULAR SALE</Title>
-            <Desc>
-              DON'T COMPOMISE WITH STYLE! GET FLAT 50% OFF FOR NEW ARRIVALS
-            </Desc>
-            <Button>SHOW NOW</Button>
-          </InfoContainer>
-        </Slide> */}
       </Wrapper>
       <Arrow direction="right" onClick={() => handleClick("right")}>
         <ArrowRightOutlined />
