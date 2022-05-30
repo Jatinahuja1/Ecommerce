@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 import {
   CheckOutlined,
   Search,
@@ -11,6 +11,7 @@ import { Badge } from "@material-ui/core";
 import { OAuthExtension } from "@magic-ext/oauth";
 import { Magic } from "magic-sdk";
 import Signin from "../pages/Auth/Signin";
+import Addproduct from "../pages/Auth/Addproduct";
 import Cart from "../pages/Auth/Cart";
 import Signup from "../pages/Auth/Signup";
 import { useHistory } from "react-router-dom";
@@ -77,6 +78,25 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = (props) => {
+  const [openProductPage, setOpenProductPage] = React.useState(true);
+
+  const handleClickToOpenProductPage = () => {
+    console.log("open");
+    setOpenProductPage(true);
+
+      return(
+                <Dialog
+                  openProductPage={openProductPage}
+                  onClose={handleToCloseProductPage}
+                >
+                  <Addproduct setOpenProductPage={setOpenProductPage} />
+                </Dialog>
+             )};
+
+  const handleToCloseProductPage = () => {
+    setOpenProductPage(false);
+  };
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickToOpen = () => {
@@ -87,23 +107,13 @@ const Navbar = (props) => {
     setOpen(false);
   };
 
-  const [openregister, setOpenCart] = React.useState(false);
+  const [openregister, setOpenRegister] = React.useState(false);
 
   const handleClickToOpenRegister = () => {
     setOpenRegister(true);
   };
 
   const handleToCloseRegister = () => {
-    setOpenRegister(false);
-  };
-  
-  const [opencart, setOpenRegister] = React.useState(false);
-
-  const handleClickToOpenCart = () => {
-    setOpenRegister(true);
-  };
-
-  const handleToCloseCart = () => {
     setOpenRegister(false);
   };
 
@@ -200,13 +210,9 @@ const Navbar = (props) => {
     }
   }, []);
 
-  const options = [
-    'ENGLISH', 'HINDI'
-  ];
+  const options = ["ENGLISH", "HINDI"];
 
-  const profile = [
-    'Profile', 'Settings',
-  ];
+  const profile = ["Profile", "Settings"];
 
   const defaultOption = options[0];
 
@@ -219,51 +225,19 @@ const Navbar = (props) => {
 
   const navigate = useNavigate();
 
-  // const navigate = Navigate();
-
-  // const getcartProducts = async ()=>{
-    
-  //   console.log("card click");
-
-
-  // function handleClick() {
-    // navigate("/Cart");
-  // }
-
-    // var userlogin = JSON.parse(localStorage.getItem("user"));
-    // console.log("userlogin",userlogin);
-    // try {
-    //   console.log("API fetch");
-    //   let res = await fetch("http://localhost:3000/get-cart-item", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       email_id: userlogin.email_id,
-    //     }),
-    //   });
-    //   console.log("res.body",res.body)
-    //   let resJson = await res.json();
-    //   console.log("resJson",resJson)
-    //   if (res.status === 201) {
-    //     console.log("Cart list fetch Succesfully", resJson)
-    //   } else {
-    //     // alert(resJson.message);
-    //     console.log("error in fetching cart list");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  
-
   return (
     <Container>
       <Wrapper>
         {/* Navbar */}
         <Left>
           {/* <Language>English</Language> */}
-          <Dropdown options={options} value={defaultOption} placeholder="Select an option"/>
+          <Dropdown
+            options={options}
+            value={defaultOption}
+            placeholder="Select an option"
+          />
           {/* <SearchContainer> */}
-            {/* <Input />
+          {/* <Input />
             <Search style={{ color: "grey", fontSize: 8 }} />
           </SearchContainer> */}
         </Left>
@@ -274,9 +248,6 @@ const Navbar = (props) => {
           {userName !== "" ? (
             <div>
               <button>{userName}</button>
-  
-              
-          {/* <Dropdown defaultProfileSelection={profile}/> */}
               <Button
                 // variant="outlined"
                 color="primary"
@@ -284,6 +255,18 @@ const Navbar = (props) => {
               >
                 LOGOUT
               </Button>
+              <Button color="primary" onClick={handleClickToOpenProductPage}>
+                ADD PRODUCT
+              </Button>
+              {/* <Dialog
+                openProductPage={openProductPage}
+                onClose={handleToCloseProductPage}
+              > */}
+              {/* <Dialog>
+
+                <Addproduct  />
+              </Dialog> */}
+              {/* </Dialog> */}
             </div>
           ) : (
             <div>
@@ -311,10 +294,10 @@ const Navbar = (props) => {
           )}
           <MenuItem>
             <Badge badgeContent={4} color="primary">
-              <ShoppingCartOutlined  onClick={getcartProducts}/>
+              <ShoppingCartOutlined onClick={getcartProducts} />
               {/* <Dialog open={opencart} onClose={handleToCloseCart}> */}
-                {/* <Cart onClick={getcartProducts} /> */}
-                {/* <Cart onClick={handleClickToOpenCart} /> */}
+              {/* <Cart onClick={getcartProducts} /> */}
+              {/* <Cart onClick={handleClickToOpenCart} /> */}
               {/* </Dialog> */}
             </Badge>
           </MenuItem>

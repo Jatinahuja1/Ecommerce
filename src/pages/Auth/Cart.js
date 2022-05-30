@@ -5,16 +5,18 @@ import "./cart.css";
 const Cart = () => {
   const [res, setresJson] = useState([]);
 
-  // console.log("resJson",resJson[0].price);
-
-  //   console.log("map",resJson.map(response =>(
-  //     response[0].price
-  //   )));
-  // const [res, setresJson] = useState({price:`${res.price}`,brand:"Shirts"});
-
   useEffect(() => {
     getCartItems();
   }, []);
+
+  function Total() {
+    var sum = 0;
+    res.map((row)=>{
+      sum += JSON.parse(row.price);
+    })
+    console.log(sum);
+    return (<p>{sum}</p>);
+  }
 
   const removeproduct = async (_id) => {
     console.log("_id", _id);
@@ -103,25 +105,26 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {res.map(({ price, _id }) => {
+                    {res.map(({img, price, _id,productName , color }) => {
                       return (
                         <tr>
                           <td>
                             <figure className="itemside">
-                              <div className="aside">
-                                {/* <img
-                              src="/public/images/items/1.jpg"
+                              {/* <div className="aside">
+                                <img
+                              src="https://m.media-amazon.com/images/I/819qvacQhiL._AC_SX255_.jpg"
                               className="img-sm"
-                            /> */}
-                              </div>
-                              {/* <div className="aside"><img src="https://m.media-amazon.com/images/I/819qvacQhiL._AC_SX255_.jpg" className="img-sm" /></div> */}
+                            />
+                              </div> */}
+                              {/* <div className="aside"><img src={img} className="img-sm" /></div> */}
+                              {/* <div className="aside"><img src={img}  /></div> */}
                               <figcaption className="info">
                                 <a href="#" className="title text-dark">
-                                  {_id}
+                                  {productName}
                                 </a>
                                 <br></br>
                                 {/* <p className="text-muted small">*/}
-                                Size: XL, Color: blue,
+                                Size: XL, Color: {color},
                                 {/* <br /> Brand: Gucci
                             </p>  */}
                               </figcaption>
@@ -156,11 +159,11 @@ const Cart = () => {
                               <i className="fa fa-heart"></i>
                             </a>
                             {/* <a href="" className="btn btn-light"> */}
-                              {/* {" "} */}
-                              {/* remove  */}
-                              <button onClick={() => removeproduct(_id)}>
-                                Remove
-                              </button>
+                            {/* {" "} */}
+                            {/* remove  */}
+                            <button onClick={() => removeproduct(_id)}>
+                              Remove
+                            </button>
                             {/* </a> */}
                           </td>
                         </tr>
@@ -170,9 +173,9 @@ const Cart = () => {
                 </table>
                 <div className="card-body border-top">
                   {/* <a href="#" className="btn btn-primary float-md-right"> */}
-                    {/* {" "} */}
-                    <button> Make Purchase </button>
-                    {/* <i className="fa fa-chevron-right"></i>{" "} */}
+                  {/* {" "} */}
+                  <button> Make Purchase </button>
+                  {/* <i className="fa fa-chevron-right"></i>{" "} */}
                   {/* </a>s */}
                   <a href="#" className="btn btn-light">
                     {" "}
@@ -209,7 +212,9 @@ const Cart = () => {
                 <div className="card-body">
                   <dl className="dlist-align">
                     <dt>Total price:</dt>
-                    <dd className="text-right">USD 568</dd>
+                    <dd className="text-right">
+                      <Total/>
+                    </dd>
                   </dl>
                   <dl className="dlist-align">
                     <dt>Discount:</dt>
@@ -218,28 +223,7 @@ const Cart = () => {
                   <dl className="dlist-align">
                     <dt>Total:</dt>
                     <dd className="text-right  h5">
-                      {/* <strong>$1,650</strong> */}
-                      {/* <strong>$  { res.map(({price, productId})=>{
-                        
-                      })}</strong> */}
-
-                      {/* {res.map(price =>{
-
-                        let sum=0; */}
-
-                      {/* } )} */}
-
-                      {/* { const Total = res.map(item => item.price).reduce((prev, curr) => prev + curr, 0);} */}
-                      {/* {  price.forEach(element => { */}
-                      {/* let sum =0;
-                             sum += element;
-
-                             console.log("Total",Total); */}
-                      {/* })}
-                       
-                            })} */}
-
-                      {/* }); */}
+                      <Total />
                     </dd>
                   </dl>
                   <hr />
