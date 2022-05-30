@@ -66,8 +66,8 @@ const Icon = styled.div`
   }
 `;
 
-const addCard = async (id,price) => {
-  console.log("items ===>",id,price);
+const addCard = async (id,img,price,productName ,color) => {
+  console.log("items ===>",id,img,price,productName,color);
   console.log("handle submit");
 
   console.log("submit");
@@ -86,11 +86,14 @@ const addCard = async (id,price) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email_id: userlogin.email_id,
+        img:img,
         productId: id,
-        price: price,
+        productName: productName,
+        color: color,
+        price: price
       }),
     });
-    console.log(res.body)
+    console.log("res.body",res.body)
     let resJson = await res.json();
     console.log("resJson",resJson)
     if (res.status === 201) {
@@ -109,13 +112,13 @@ const Product = ({ item }) => {
   return (
     <Container>
       <Circle>
-        <Image src={item.img} />
+        <Image src={item.img} price={item.price} />
         <Info>
           <Icon>
             <ShoppingCartOutlined
               onClick={(e) => {
-                addCard(item.id ,item.price);
-                // console.log("add item09",item.id ,item.price)
+                addCard(item.id ,item.img,item.price,item.productName,item.color);
+                console.log("add item09",item.id ,item.price)
               }}
             />
           </Icon>
@@ -126,6 +129,7 @@ const Product = ({ item }) => {
             <FavoriteBorderOutlined />
           </Icon>
         </Info>
+        <div><strong>${item.price}</strong></div>
       </Circle>
     </Container>
   );
