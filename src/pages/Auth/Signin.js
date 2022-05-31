@@ -40,8 +40,6 @@ export default function Signin(props) {
       email,
       redirectURI: new URL("/home", window.location.origin).href,
     });
-    console.log("didToken", didToken);
-    console.log(didToken);
   };
 
   const handleSubmit = async (event) => {
@@ -59,6 +57,7 @@ export default function Signin(props) {
         }),
       });
       let resJson = await res.json();
+      console.log("resJson-login",resJson)
       if (res.status === 200) {
         setEmail("");
         setPassword("");
@@ -66,10 +65,8 @@ export default function Signin(props) {
         if (resJson.success === true) {
           handleToClose();
           console.log("User login");
-          console.log(resJson.data);
           var Data = resJson.data;
-          console.log("Data", Data);
-          console.log("Data.token", Data.token);
+          console.log("Data",Data);
           const localData = {
             email_id: Data.email_id,
             firstName: Data.firstName,

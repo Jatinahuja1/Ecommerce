@@ -106,61 +106,61 @@ module.exports = {
   /**
    * userController.forgotPassword()
    */
-  forgotPassword: async function (req, res) {
-    console.log("req.body", req.body);
-    let checkUser, mailData;
-    try {
-      checkUser = await userModel.findOne({
-        email: req.body.email_id,
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(200).json({
-        error: err,
-        status: false,
-        message: "Something went wrong",
-      });
-    }
-    if (checkUser) {
-      try {
-        let verifyToken = generateRandomOtp(4);
-        const updateUser = await userModel.findOneAndUpdate(
-          { _id: checkUser.id },
-          { otp: verifyToken },
-          { new: true }
-        );
+  // forgotPassword: async function (req, res) {
+  //   console.log("req.body", req.body);
+  //   let checkUser, mailData;
+  //   try {
+  //     checkUser = await userModel.findOne({
+  //       email: req.body.email_id,
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //     return res.status(200).json({
+  //       error: err,
+  //       status: false,
+  //       message: "Something went wrong",
+  //     });
+  //   }
+  //   if (checkUser) {
+  //     try {
+  //       let verifyToken = generateRandomOtp(4);
+  //       const updateUser = await userModel.findOneAndUpdate(
+  //         { _id: checkUser.id },
+  //         { otp: verifyToken },
+  //         { new: true }
+  //       );
 
-        mailData = {
-          to: checkUser.email,
-          subject: "Forgot Password",
-          template: "Forgot Password",
-        };
-        mailer.sendMail(mailData);
-        return res.status(200).json({
-          status: true,
-          message: "A password has been sent to your mail",
-        });
-      } catch (err) {
-        console.log(err);
-        return res.status(200).json({
-          error: err,
-          status: false,
-          message: "Something went wrong",
-        });
-      }
-    } else {
-      return res.status(200).json({
-        status: false,
-        message: "User not found",
-      });
-    }
-    function generateRandomOtp(length = 4) {
-      let OTP = "";
-      let digits = "0123456789";
-      for (let i = 0; i < length; i++) {
-        OTP += digits[Math.floor(Math.random() * 10)];
-      }
-      return OTP;
-    }
-  },
+  //       mailData = {
+  //         to: checkUser.email,
+  //         subject: "Forgot Password",
+  //         template: "Forgot Password",
+  //       };
+  //       mailer.sendMail(mailData);
+  //       return res.status(200).json({
+  //         status: true,
+  //         message: "A password has been sent to your mail",
+  //       });
+  //     } catch (err) {
+  //       console.log(err);
+  //       return res.status(200).json({
+  //         error: err,
+  //         status: false,
+  //         message: "Something went wrong",
+  //       });
+  //     }
+  //   } else {
+  //     return res.status(200).json({
+  //       status: false,
+  //       message: "User not found",
+  //     });
+  //   }
+  //   function generateRandomOtp(length = 4) {
+  //     let OTP = "";
+  //     let digits = "0123456789";
+  //     for (let i = 0; i < length; i++) {
+  //       OTP += digits[Math.floor(Math.random() * 10)];
+  //     }
+  //     return OTP;
+  //   }
+  // },
 };

@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import Products from "./Products";
+import { useHistory } from "react-router-dom";
+
 
 const Container = styled.div`
   flex: 1;
