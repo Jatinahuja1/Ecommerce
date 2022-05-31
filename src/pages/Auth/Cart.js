@@ -15,7 +15,7 @@ const Cart = () => {
       sum += JSON.parse(row.price);
     })
     console.log(sum);
-    return (<p>{sum}</p>);
+    return (<p>${sum}</p>);
   }
 
   const removeproduct = async (_id) => {
@@ -105,7 +105,7 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {res.map(({img, price, _id,productName , color }) => {
+                    {res.map(({img, price, _id, name ,vendorId}) => {
                       return (
                         <tr>
                           <td>
@@ -120,11 +120,13 @@ const Cart = () => {
                               {/* <div className="aside"><img src={img}  /></div> */}
                               <figcaption className="info">
                                 <a href="#" className="title text-dark">
-                                  {productName}
+                                  {name}
                                 </a>
                                 <br></br>
                                 {/* <p className="text-muted small">*/}
-                                Size: XL, Color: {color},
+                                {/* Size: XL, Color: {color}, */}
+                                Size: XL, Color: BLACK,
+
                                 {/* <br /> Brand: Gucci
                             </p>  */}
                               </figcaption>

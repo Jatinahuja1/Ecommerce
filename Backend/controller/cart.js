@@ -43,11 +43,10 @@ module.exports = {
     try {
       let additem = await itemModel({
         email_id: req.body.email_id,
-        // _id: userDetails._id,
         productId: req.body.productId,
-        img: req.body.img,
-        productName: req.body.productName,
-        color: req.body.color,
+        img: req.body.fileName,
+        productName: req.body.name,
+        // color: req.body.color,
         price: req.body.price,
       });
       console.log("addite123", additem);

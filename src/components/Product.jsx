@@ -66,18 +66,13 @@ const Icon = styled.div`
   }
 `;
 
-const addCard = async (id,img,price,productName ,color) => {
-  console.log("items ===>",id,img,price,productName,color);
-  console.log("handle submit");
+const addCard = async (id, img, price, productName, color) => {
+  console.log("items ===>", id, img, price, productName, color);
 
-  console.log("submit");
-  
   var userlogin = JSON.parse(localStorage.getItem("user"));
-  // console.log("serlogin.email_id",userlogin.email_id)
 
-  if(!userlogin  ){
-
-  alert("Please login before adding item to cart");
+  if (!userlogin) {
+    alert("Please login before adding item to cart");
   }
   try {
     console.log("API fetch");
@@ -86,18 +81,18 @@ const addCard = async (id,img,price,productName ,color) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email_id: userlogin.email_id,
-        img:img,
+        img: img,
         productId: id,
         productName: productName,
         color: color,
-        price: price
+        price: price,
       }),
     });
-    console.log("res.body",res.body)
+    console.log("res.body", res.body);
     let resJson = await res.json();
-    console.log("resJson",resJson)
+    console.log("resJson", resJson);
     if (res.status === 201) {
-      console.log("Item added to cart succesafully")
+      console.log("Item added to cart succesafully");
     } else {
       // alert(resJson.message);
       console.log("error in inserting user");
@@ -107,18 +102,22 @@ const addCard = async (id,img,price,productName ,color) => {
   }
 };
 
-
 const Product = ({ item }) => {
   return (
     <Container>
       <Circle>
-        <Image src={item.img} price={item.price} />
+        <Image src={item.fileName} />
         <Info>
           <Icon>
             <ShoppingCartOutlined
               onClick={(e) => {
-                addCard(item.id ,item.img,item.price,item.productName,item.color);
-                console.log("add item09",item.id ,item.price)
+                addCard(
+                  item._id,
+                  item.fileName,
+                  item.price,
+                  item.name,
+                );
+                console.log("add item09", item._id, item.price,item.name);
               }}
             />
           </Icon>
@@ -129,7 +128,10 @@ const Product = ({ item }) => {
             <FavoriteBorderOutlined />
           </Icon>
         </Info>
-        <div><strong>${item.price}</strong></div>
+        <div>
+          <strong>Product Name: {item.name}</strong><br/><br/>
+          <strong>Price: ${item.price}</strong>
+        </div>
       </Circle>
     </Container>
   );

@@ -78,20 +78,12 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = (props) => {
-  const [openProductPage, setOpenProductPage] = React.useState(true);
+  const [openProductPage, setOpenProductPage] = React.useState(false);
 
   const handleClickToOpenProductPage = () => {
     console.log("open");
     setOpenProductPage(true);
-
-      return(
-                <Dialog
-                  openProductPage={openProductPage}
-                  onClose={handleToCloseProductPage}
-                >
-                  <Addproduct setOpenProductPage={setOpenProductPage} />
-                </Dialog>
-             )};
+  };
 
   const handleToCloseProductPage = () => {
     setOpenProductPage(false);
@@ -231,11 +223,11 @@ const Navbar = (props) => {
         {/* Navbar */}
         <Left>
           {/* <Language>English</Language> */}
-          <Dropdown
+          {/* <Dropdown
             options={options}
             value={defaultOption}
             placeholder="Select an option"
-          />
+          /> */}
           {/* <SearchContainer> */}
           {/* <Input />
             <Search style={{ color: "grey", fontSize: 8 }} />
@@ -258,15 +250,12 @@ const Navbar = (props) => {
               <Button color="primary" onClick={handleClickToOpenProductPage}>
                 ADD PRODUCT
               </Button>
-              {/* <Dialog
-                openProductPage={openProductPage}
-                onClose={handleToCloseProductPage}
-              > */}
-              {/* <Dialog>
-
-                <Addproduct  />
-              </Dialog> */}
-              {/* </Dialog> */}
+              <Dialog
+                open={openProductPage}
+                onClose={()=>handleToCloseProductPage}
+              >
+                  <Addproduct setOpenProductPage={setOpenProductPage}/>
+                </Dialog>
             </div>
           ) : (
             <div>
@@ -293,12 +282,8 @@ const Navbar = (props) => {
             </div>
           )}
           <MenuItem>
-            <Badge badgeContent={4} color="primary">
+            <Badge badgeContent={2} color="primary">
               <ShoppingCartOutlined onClick={getcartProducts} />
-              {/* <Dialog open={opencart} onClose={handleToCloseCart}> */}
-              {/* <Cart onClick={getcartProducts} /> */}
-              {/* <Cart onClick={handleClickToOpenCart} /> */}
-              {/* </Dialog> */}
             </Badge>
           </MenuItem>
         </Right>

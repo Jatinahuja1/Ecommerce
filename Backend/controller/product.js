@@ -4,23 +4,12 @@ const product = require("../model/productModel");
 var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, new Date().getTime() + "-" + file.originalname);
-  },
-});
-var upload = multer({ storage });
 
 module.exports = {
 
 addProduct: (req, res) => {
     console.log("req.params", req.body);
     let url = req.protocol + "://" + req.get("host");
-    console.log(req.file.filename);
     new product({
       name: req.body.name,
       price: req.body.price,
@@ -39,7 +28,7 @@ addProduct: (req, res) => {
   getProduct: async(req,res)=>{
       console.log("getProduct",req.body)
       try{
-        let cartItems = await product.find({ _id: req.body._id });
+        let cartItems = await product.find({ vendorId: req.body.id });
         console.log(cartItems);
         return res.status(201).send(cartItems);
       }catch(e){

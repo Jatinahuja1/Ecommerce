@@ -8,16 +8,15 @@ import Products from "../components/Products";
 import Newsletter from "../components/Newsletter";
 
 const Home = () => {
-
   return (
     <div>
       <Announcement />
       <Navbar />
-      <Slider/>
-      <Categories/>
-      <Products/>
-      <Newsletter/> 
-      <Footer/> 
+      <Slider />
+      <Categories />
+      <Products />
+      <Newsletter />
+      <Footer />
     </div>
   );
 };
