@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./cart.css";
+import "./Cart.css";
 
 const Cart = () => {
   const [res, setresJson] = useState([]);
@@ -11,11 +11,10 @@ const Cart = () => {
 
   function Total() {
     var sum = 0;
-    res.map((row)=>{
-      sum += JSON.parse(row.price);
-    })
-    console.log(sum);
-    return (<p>${sum}</p>);
+    res.map((element) => {
+      sum += JSON.parse(element.price);
+    });
+    return sum;
   }
 
   const removeproduct = async (_id) => {
@@ -68,7 +67,6 @@ const Cart = () => {
         setresJson(resJson);
         console.log("Cart list fetch Succesfully", resJson);
       } else {
-        // alert(resJson.message);
         console.log("error in fetching cart list");
       }
     } catch (err) {
@@ -92,10 +90,10 @@ const Cart = () => {
                 <table className="table table-borderless table-shopping-cart">
                   <thead className="text-muted">
                     <tr className="small text-uppercase">
-                      <th scope="col">ProductID</th>
-                      <th scope="col" width="120">
+                      <th scope="col">Product</th>
+                      {/* <th scope="col" width="120">
                         Quantity
-                      </th>
+                      </th> */}
                       <th scope="col" width="120">
                         Price
                       </th>
@@ -105,72 +103,153 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {res.map(({img, price, _id, name ,vendorId}) => {
-                      return (
-                        <tr>
-                          <td>
-                            <figure className="itemside">
-                              {/* <div className="aside">
-                                <img
-                              src="https://m.media-amazon.com/images/I/819qvacQhiL._AC_SX255_.jpg"
-                              className="img-sm"
-                            />
-                              </div> */}
-                              {/* <div className="aside"><img src={img} className="img-sm" /></div> */}
-                              {/* <div className="aside"><img src={img}  /></div> */}
-                              <figcaption className="info">
-                                <a href="#" className="title text-dark">
-                                  {name}
-                                </a>
-                                <br></br>
-                                {/* <p className="text-muted small">*/}
-                                {/* Size: XL, Color: {color}, */}
-                                Size: XL, Color: BLACK,
+                    {
+                      res.length !== 0 ? (
+                        res.map(
+                          ({
+                            fileName,
+                            price,
+                            _id,
+                            size,
+                            color,
+                            name,
+                            vendorId,
+                          }) => {
+                            return (
+                              <tr>
+                                <td>
+                                  <figure className="itemside">
+                                    {/* <div className="img-sm">
+                                  <img
+                                src={fileName}
+                                className="img-sm"
+                              /> */}
+                                    {/* </div> */}
+                                    {/* <div className="aside"><img src={img} className="img-sm" /></div> */}
+                                    {/* <div className="aside"><img src={img}  /></div> */}
+                                    <figcaption className="info">
+                                      <a href="#" className="title text-dark">
+                                        {name}
+                                      </a>
+                                      <br></br>
+                                      {/* <p className="text-muted small">*/}
+                                      {/* Size: XL, Color: {color}, */}
+                                      Size: {size}, Color: {color},
+                                      {/* <br /> Brand: Gucci
+                              </p>  */}
+                                    </figcaption>
+                                  </figure>
+                                </td>
+                                {/* <td>
+                              <select className="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                              </select>
+                            </td> */}
+                                <td>
+                                  <div className="price-wrap">
+                                    <var className="price">₹ {price}</var>
+                                    <br></br>
+                                    <small className="text-muted">
+                                      {/* {res.map(response => response.productId)} each */}
+                                    </small>
+                                  </div>
+                                </td>
+                                <td className="text-right">
+                                  <a
+                                    data-original-title="Save to Wishlist"
+                                    title=""
+                                    href=""
+                                    className="btn btn-light mr-2"
+                                    data-toggle="tooltip"
+                                  >
+                                    {" "}
+                                    <i className="fa fa-heart"></i>
+                                  </a>
+                                  {/* <a href="" className="btn btn-light"> */}
+                                  {/* {" "} */}
+                                  {/* remove  */}
+                                  <button onClick={() => removeproduct(_id)}>
+                                    Remove
+                                  </button>
+                                  {/* </a> */}
+                                </td>
+                              </tr>
+                            );
+                          }
+                        )
+                      ) : (
+                        <div className="cart"><strong>Your Cart is Empty !!</strong></div>
+                      )
+                      // res.map(({fileName, price, _id, size,color, name ,vendorId}) => {
+                      //   return (
+                      //     <tr>
+                      //       <td>
+                      //         <figure className="itemside">
+                      //           {/* <div className="img-sm">
+                      //             <img
+                      //           src={fileName}
+                      //           className="img-sm"
+                      //         /> */}
+                      //           {/* </div> */}
+                      //           {/* <div className="aside"><img src={img} className="img-sm" /></div> */}
+                      //           {/* <div className="aside"><img src={img}  /></div> */}
+                      //           <figcaption className="info">
+                      //             <a href="#" className="title text-dark">
+                      //               {name}
+                      //             </a>
+                      //             <br></br>
+                      //             {/* <p className="text-muted small">*/}
+                      //             {/* Size: XL, Color: {color}, */}
+                      //             Size: {size}, Color: {color},
 
-                                {/* <br /> Brand: Gucci
-                            </p>  */}
-                              </figcaption>
-                            </figure>
-                          </td>
-                          <td>
-                            <select className="form-control">
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                            </select>
-                          </td>
-                          <td>
-                            <div className="price-wrap">
-                              <var className="price">${price}</var>
-                              <br></br>
-                              <small className="text-muted">
-                                {/* {res.map(response => response.productId)} each */}
-                              </small>
-                            </div>
-                          </td>
-                          <td className="text-right">
-                            <a
-                              data-original-title="Save to Wishlist"
-                              title=""
-                              href=""
-                              className="btn btn-light mr-2"
-                              data-toggle="tooltip"
-                            >
-                              {" "}
-                              <i className="fa fa-heart"></i>
-                            </a>
-                            {/* <a href="" className="btn btn-light"> */}
-                            {/* {" "} */}
-                            {/* remove  */}
-                            <button onClick={() => removeproduct(_id)}>
-                              Remove
-                            </button>
-                            {/* </a> */}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                      //             {/* <br /> Brand: Gucci
+                      //         </p>  */}
+                      //           </figcaption>
+                      //         </figure>
+                      //       </td>
+                      //       {/* <td>
+                      //         <select className="form-control">
+                      //           <option>1</option>
+                      //           <option>2</option>
+                      //           <option>3</option>
+                      //           <option>4</option>
+                      //         </select>
+                      //       </td> */}
+                      //       <td>
+                      //         <div className="price-wrap">
+                      //           <var className="price">₹ {price}</var>
+                      //           <br></br>
+                      //           <small className="text-muted">
+                      //             {/* {res.map(response => response.productId)} each */}
+                      //           </small>
+                      //         </div>
+                      //       </td>
+                      //       <td className="text-right">
+                      //         <a
+                      //           data-original-title="Save to Wishlist"
+                      //           title=""
+                      //           href=""
+                      //           className="btn btn-light mr-2"
+                      //           data-toggle="tooltip"
+                      //         >
+                      //           {" "}
+                      //           <i className="fa fa-heart"></i>
+                      //         </a>
+                      //         {/* <a href="" className="btn btn-light"> */}
+                      //         {/* {" "} */}
+                      //         {/* remove  */}
+                      //         <button onClick={() => removeproduct(_id)}>
+                      //           Remove
+                      //         </button>
+                      //         {/* </a> */}
+                      //       </td>
+                      //     </tr>
+                      //   );
+                      // })
+                    }
                   </tbody>
                 </table>
                 <div className="card-body border-top">
@@ -215,17 +294,17 @@ const Cart = () => {
                   <dl className="dlist-align">
                     <dt>Total price:</dt>
                     <dd className="text-right">
-                      <Total/>
+                      ₹<Total />
                     </dd>
                   </dl>
                   <dl className="dlist-align">
                     <dt>Discount:</dt>
-                    <dd className="text-right">USD 0</dd>
+                    <dd className="text-right">0</dd>
                   </dl>
                   <dl className="dlist-align">
                     <dt>Total:</dt>
                     <dd className="text-right  h5">
-                      <Total />
+                      ₹<Total />
                     </dd>
                   </dl>
                   <hr />

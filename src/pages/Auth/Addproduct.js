@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Addproduct.css";
 import axios from "axios";
+import { color } from "@mui/system";
 
 function Addproduct(props) {
   let setOpen = props.setOpenProductPage;
@@ -18,6 +19,8 @@ function Addproduct(props) {
   const [vendorId, setvendorId] = useState("");
   const [price, setprice] = useState("");
   const [image, setimage] = useState("");
+  const [color, setColor] = useState("");
+  const [size, setSIze] = useState("");
 
   const handlename = (e) => {
     setName(e.target.value);
@@ -25,6 +28,14 @@ function Addproduct(props) {
 
   const handleVendorId = (e) => {
     setvendorId(e.target.value);
+  };
+
+  const handleColor = (e) => {
+    setColor(e.target.value);
+  };
+
+  const handleSize = (e) => {
+    setSIze(e.target.value);
   };
 
   const handlePrice = (e) => {
@@ -43,6 +54,9 @@ function Addproduct(props) {
     formData.append("name", name);
     formData.append("price", price);
     formData.append("vendorId", userId);
+    formData.append("color", color);
+    formData.append("size", size);
+
 
     const response = await axios({
       method: "post",
@@ -77,6 +91,28 @@ function Addproduct(props) {
             required
             onChange={(e) => {
               handlename(e);
+            }}
+          />
+        </label>
+        <label>
+          Size:
+          <input
+            type="text"
+            value={size}
+            required
+            onChange={(e) => {
+              handleSize(e);
+            }}
+          />
+        </label>
+        <label>
+          color:
+          <input
+            type="text"
+            value={color}
+            required
+            onChange={(e) => {
+              handleColor(e);
             }}
           />
         </label>

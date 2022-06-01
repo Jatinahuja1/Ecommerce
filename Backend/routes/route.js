@@ -40,7 +40,7 @@ router.post("/delete-cart-item", cartController.deleteCartItems);
 
 router.post("/", upload.single("image"), productController.addProduct);
 
-router.post("/getproduct", productController.getProduct);
+router.get("/getproduct", productController.getProduct);
 
 // router.post("/payment", cartController.payment);
 

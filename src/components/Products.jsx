@@ -19,14 +19,9 @@ function Products() {
   }, []);
 
   const getProducts = async () => {
-    var userId = JSON.parse(localStorage.getItem("user")).id;
-    console.log("userId", userId);
     let res = await fetch("http://localhost:3000/getproduct", {
-      method: "POST",
+      method: "GET",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: userId,
-      }),
     });
     let resJson = await res.json();
     console.log("resJson", resJson);
