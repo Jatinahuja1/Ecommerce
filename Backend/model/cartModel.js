@@ -8,7 +8,8 @@ const itemSchema = new Schema({
     fileName : { type: String , required: true},
     createdDate: { type: Date, default: Date.now },
     name : { type: String , required: true},
-    // color:  { type: String , required: true},
+    size : { type: String },
+    color:  { type: String},
     is_deleted :{ }
 });
 

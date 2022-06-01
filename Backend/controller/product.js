@@ -14,6 +14,8 @@ addProduct: (req, res) => {
       name: req.body.name,
       price: req.body.price,
       vendorId:req.body.vendorId,
+      color: req.body.color,
+      size: req.body.size,
       fileName: url + "/uploads/" + req.file.filename,
     }).save((err, docs) => {
       if (!err) {
@@ -26,12 +28,13 @@ addProduct: (req, res) => {
   },
 
   getProduct: async(req,res)=>{
-      console.log("getProduct",req.body)
       try{
-        let cartItems = await product.find({ vendorId: req.body.id });
-        console.log(cartItems);
+        let cartItems = await product.find();
+
+        console.log("cartItems",cartItems);
         return res.status(201).send(cartItems);
       }catch(e){
+        console.log("e",e)
         res.status(400).send({
             success: false,
             message: "Something went wrong",

@@ -66,8 +66,8 @@ const Icon = styled.div`
   }
 `;
 
-const addCard = async (id, img, price, productName, color) => {
-  console.log("items ===>", id, img, price, productName, color);
+const addCard = async (id, fileName, price, name, color,size) => {
+  console.log("items ===>", id, fileName, price, name, size, color);
 
   var userlogin = JSON.parse(localStorage.getItem("user"));
 
@@ -81,9 +81,10 @@ const addCard = async (id, img, price, productName, color) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email_id: userlogin.email_id,
-        img: img,
+        fileName: fileName,
         productId: id,
-        productName: productName,
+        name: name,
+        size:size,
         color: color,
         price: price,
       }),
@@ -116,8 +117,10 @@ const Product = ({ item }) => {
                   item.fileName,
                   item.price,
                   item.name,
+                  item.color,
+                  item.size,
                 );
-                console.log("add item09", item._id, item.price,item.name);
+                console.log("add item09", item._id, item.size,item.price,item.name);
               }}
             />
           </Icon>
@@ -129,8 +132,9 @@ const Product = ({ item }) => {
           </Icon>
         </Info>
         <div>
-          <strong>Product Name: {item.name}</strong><br/><br/>
-          <strong>Price: ${item.price}</strong>
+          <strong>Product Name: {item.name}</strong><br/>
+          <strong>Color: {item.color}</strong><br/>
+          <strong>Price: ₹ {item.price}</strong><br/>
         </div>
       </Circle>
     </Container>
