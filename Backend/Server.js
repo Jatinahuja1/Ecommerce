@@ -15,10 +15,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use("/", routes);
 const port = 3000;
-
-var jwt = require("jsonwebtoken");
-const JWT_SECRET_KEY = "gfg_jwt_secret_key";
-const dotenv = require("dotenv");
+require('dotenv').config()
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);

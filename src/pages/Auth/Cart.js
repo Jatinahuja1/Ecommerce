@@ -18,10 +18,7 @@ const Cart = () => {
   }
 
   const removeproduct = async (_id) => {
-    console.log("_id", _id);
     try {
-      console.log("API fetch");
-
       let res = await fetch("http://localhost:3000/delete-cart-item", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,7 +28,6 @@ const Cart = () => {
       });
       let resJson = await res.json();
       if (res.status === 201) {
-        console.log("res", resJson);
         console.log("Product deleted successfully");
       } else {
         console.log("error in deleting");
@@ -47,12 +43,31 @@ const Cart = () => {
     history("/home");
   };
 
+  const paymentSuccess = async (email_id) => {
+    var userlogin = JSON.parse(localStorage.getItem("user"));
+    try {
+      let res = await fetch("http://localhost:3000/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          // email_id: email_id,
+          email_id: userlogin.email_id,
+        }),
+      })
+      let resJson = await res.json();
+      if (res.status === 200) {
+             window.location = resJson.url;
+      } else {
+        console.log("Payment failed");       
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    }
+
   const getCartItems = async () => {
     var userlogin = JSON.parse(localStorage.getItem("user"));
-
-    console.log("userlogin", userlogin);
     try {
-      console.log("API fetch");
       let res = await fetch("http://localhost:3000/get-cart-item", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -60,12 +75,10 @@ const Cart = () => {
           email_id: userlogin.email_id,
         }),
       });
-      console.log("res.body", res);
       let resJson = await res.json();
-      console.log("resJson", resJson);
       if (res.status === 201) {
         setresJson(resJson);
-        console.log("Cart list fetch Succesfully", resJson);
+        console.log("Cart list fetch Succesfully");
       } else {
         console.log("error in fetching cart list");
       }
@@ -255,7 +268,7 @@ const Cart = () => {
                 <div className="card-body border-top">
                   {/* <a href="#" className="btn btn-primary float-md-right"> */}
                   {/* {" "} */}
-                  <button> Make Purchase </button>
+                  <button onClick={paymentSuccess}> Make Purchase </button>
                   {/* <i className="fa fa-chevron-right"></i>{" "} */}
                   {/* </a>s */}
                   <a href="#" className="btn btn-light">

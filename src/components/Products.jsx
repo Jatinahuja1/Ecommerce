@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-// import { popularProducts } from "../data";
 import Product from "./Product";
 
 const Container = styled.div`
@@ -14,7 +13,6 @@ function Products() {
   const [res, setresJson] = useState([]);
 
   useEffect(() => {
-    console.log("Products");
     getProducts();
   }, []);
 

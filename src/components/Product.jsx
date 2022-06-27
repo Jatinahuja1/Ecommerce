@@ -67,15 +67,11 @@ const Icon = styled.div`
 `;
 
 const addCard = async (id, fileName, price, name, color,size) => {
-  console.log("items ===>", id, fileName, price, name, size, color);
-
   var userlogin = JSON.parse(localStorage.getItem("user"));
-
   if (!userlogin) {
     alert("Please login before adding item to cart");
   }
   try {
-    console.log("API fetch");
     let res = await fetch("http://localhost:3000/add-item-to-cart", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -89,13 +85,10 @@ const addCard = async (id, fileName, price, name, color,size) => {
         price: price,
       }),
     });
-    console.log("res.body", res.body);
     let resJson = await res.json();
-    console.log("resJson", resJson);
     if (res.status === 201) {
       console.log("Item added to cart succesafully");
     } else {
-      // alert(resJson.message);
       console.log("error in inserting user");
     }
   } catch (err) {
@@ -120,7 +113,6 @@ const Product = ({ item }) => {
                   item.color,
                   item.size,
                 );
-                console.log("add item09", item._id, item.size,item.price,item.name);
               }}
             />
           </Icon>

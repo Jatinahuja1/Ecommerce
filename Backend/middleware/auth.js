@@ -5,16 +5,11 @@ var TOKEN_SECRET = "mysecret123";
 
 module.exports = {
   checkToken: (req, res, next) => {
-    console.log("req=>", req.body);
     let token = req.get("authorization");
-    console.log("token AUth=>", token);
     if (token) {
       token = token.slice(7);
-      console.log("token slice=>", token);
-      console.log();
       jwt.verify(token, "mysecret123", (err, decoded) => {
         if (err) {
-          console.log("err token=>", err);
           return res.json({
             status: 0,
             message: "Invalid Token...",
@@ -36,5 +31,5 @@ module.exports = {
         message: "Access Denied! Unauthorized User",
       });
     }
-  }
+  },
 };

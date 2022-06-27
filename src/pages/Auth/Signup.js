@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Magic } from "magic-sdk";
 import { OAuthExtension } from "@magic-ext/oauth";
 import GoogleButton from "react-google-button";
-
 import Home from "../Home";
 import Button from "@material-ui/core/Button";
 
@@ -20,7 +19,6 @@ function Signup(props) {
   };
 
   const handleToClose = () => {
-    console.log("Close dialogue");
     setOpen(false);
   };
 
@@ -51,7 +49,6 @@ function Signup(props) {
   };
 
   const pages = () => {
-    console.log("move page");
     navigate("/Home");
   };
 
@@ -66,13 +63,8 @@ function Signup(props) {
   };
 
   const handleSubmit = async (e) => {
-    console.log("e", e);
-    console.log("handle submit");
-
     e.preventDefault();
-    console.log("submit");
     try {
-      console.log("API fetch");
       let res = await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -172,7 +164,6 @@ function Signup(props) {
         <GoogleButton
           onClick={(e) => {
             handleClick(e);
-            console.log("Google button clicked");
           }}
         />
       </div>
