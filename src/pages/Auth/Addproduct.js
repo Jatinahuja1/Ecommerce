@@ -11,7 +11,6 @@ function Addproduct(props) {
   };
 
   const handleToClose = () => {
-    console.log("Close dialogue");
     setOpen(false);
   };
 
@@ -43,12 +42,8 @@ function Addproduct(props) {
   };
 
   const handleSubmit = async (e) => {
-    console.log("e", e);
     e.preventDefault();
-
     var userId = JSON.parse(localStorage.getItem("user")).id;
-    console.log("userId",userId)
-
     const formData = new FormData();
     formData.append("image", image);
     formData.append("name", name);
@@ -56,7 +51,6 @@ function Addproduct(props) {
     formData.append("vendorId", userId);
     formData.append("color", color);
     formData.append("size", size);
-
 
     const response = await axios({
       method: "post",
@@ -66,7 +60,6 @@ function Addproduct(props) {
         "Content-Type": `multipart/form-data`,
       },
     });
-    console.log("response", response.data);
     if (response.status === 200) {
       console.log("data saved succesfully");
       handleToClose();
@@ -133,7 +126,6 @@ function Addproduct(props) {
             onChange={(e) => {
               if (e) {
                 const file = e.target.files;
-                console.log("===>", file);
                 if (file) {
                   setimage(file[0]);
                 }

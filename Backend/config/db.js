@@ -1,7 +1,8 @@
 var MongoClient = require('mongodb').MongoClient;
 var mongoose = require("mongoose");
-
-var url = "mongodb://localhost:27017/mydb";
+const dotenv = require('dotenv');
+dotenv.config();
+var url = process.env.DB_HOST;
 
 mongoose 
  .connect(url, {

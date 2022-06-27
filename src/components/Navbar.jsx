@@ -81,7 +81,6 @@ const Navbar = (props) => {
   const [openProductPage, setOpenProductPage] = React.useState(false);
 
   const handleClickToOpenProductPage = () => {
-    console.log("open");
     setOpenProductPage(true);
   };
 
@@ -161,16 +160,12 @@ const Navbar = (props) => {
       isSocial: true,
       token: localStorage.getItem("jwt_token"),
     };
-    console.log("payload====>", payload.email);
-    console.log("payload====>", payload);
     setFirstName("");
     setLastName("");
     setUserName("");
     setEmail("");
     console.log("data saved succesfully");
     var Data = payload;
-    console.log("Data", Data);
-    console.log("Data.token", Data.token);
     const localData = {
       email_id: payload.email,
       firstName: payload.firstName,
@@ -183,7 +178,6 @@ const Navbar = (props) => {
         new Date().setHours(new Date().getHours() + 2)
       ).toLocaleString(),
     };
-    console.log("localData", localData);
     localStorage.setItem("user", JSON.stringify(localData));
     handleToClose();
   };
@@ -192,8 +186,6 @@ const Navbar = (props) => {
     if (localStorage.getItem("user")) {
       var getTimeOut = JSON.parse(localStorage.getItem("user")).timeOut;
       var refreshTime = new Date().toLocaleString();
-      console.log("getTimeOut", getTimeOut);
-      console.log("new Time", refreshTime);
       if (getTimeOut > refreshTime) {
         setUserName(JSON.parse(localStorage.getItem("user")).username);
       } else {
@@ -211,7 +203,6 @@ const Navbar = (props) => {
   const defaultProfileSelection = profile[0];
 
   const getcartProducts = () => {
-    console.log("move page");
     navigate("/Cart");
   };
 
@@ -220,18 +211,7 @@ const Navbar = (props) => {
   return (
     <Container>
       <Wrapper>
-        {/* Navbar */}
         <Left>
-          {/* <Language>English</Language> */}
-          {/* <Dropdown
-            options={options}
-            value={defaultOption}
-            placeholder="Select an option"
-          /> */}
-          {/* <SearchContainer> */}
-          {/* <Input />
-            <Search style={{ color: "grey", fontSize: 8 }} />
-          </SearchContainer> */}
         </Left>
         <Center>
           <Logo>Shop Mall</Logo>

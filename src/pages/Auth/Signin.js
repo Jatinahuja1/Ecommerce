@@ -44,10 +44,7 @@ export default function Signin(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-      console.log("API fetch");
-
       let res = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -57,16 +54,12 @@ export default function Signin(props) {
         }),
       });
       let resJson = await res.json();
-      console.log("resJson-login",resJson)
       if (res.status === 200) {
         setEmail("");
         setPassword("");
-        console.log("res", resJson);
         if (resJson.success === true) {
           handleToClose();
-          console.log("User login");
           var Data = resJson.data;
-          console.log("Data",Data);
           const localData = {
             email_id: Data.email_id,
             firstName: Data.firstName,
@@ -80,11 +73,9 @@ export default function Signin(props) {
               new Date().setHours(new Date().getHours() + 2)
             ).toLocaleString(),
           };
-          console.log("localData", localData);
           localStorage.setItem("user", JSON.stringify(localData));
         } else {
           alert(resJson.message);
-          console.log("Error");
         }
       } else {
         console.log("error in login");
@@ -123,7 +114,6 @@ export default function Signin(props) {
           <GoogleButton
             onClick={(e) => {
               handleClick(e);
-              console.log("Google button clicked");
             }}
           />
         </div>
